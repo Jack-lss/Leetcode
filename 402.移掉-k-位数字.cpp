@@ -1,4 +1,12 @@
 /*
+ * @Author: your name
+ * @Date: 2021-10-10 11:09:47
+ * @LastEditTime: 2021-10-10 11:23:46
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \leetcode\402.移掉-k-位数字.cpp
+ */
+/*
  * @lc app=leetcode.cn id=402 lang=cpp
  *
  * [402] 移掉 K 位数字
@@ -56,7 +64,32 @@
 class Solution {
 public:
     string removeKdigits(string num, int k) {
+        vector<char> stk;
+        // 单调栈
+        for (auto& digit: num) {
+            while (stk.size() > 0 && stk.back() > digit && k) {
+                stk.pop_back();
+                k -= 1;
+            }
+            stk.push_back(digit);
+        }
 
+        // 保证去掉k位数字
+        for (; k > 0; --k) {
+            stk.pop_back();
+        }
+
+        // 删除前置0
+        string ans = "";
+        bool isLeadingZero = true;
+        for (auto& digit: stk) {
+            if (isLeadingZero && digit == '0') {
+                continue;
+            }
+            isLeadingZero = false;
+            ans += digit;
+        }
+        return ans == "" ? "0" : ans;
     }
 };
 // @lc code=end
